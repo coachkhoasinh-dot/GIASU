@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Gia Sư Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        .toast-enter { animation: slideIn 0.3s ease-out forwards; }
+        .toast-exit { animation: fadeOut 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-chalkboard-teacher text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight">Gia Sư Online</h1>
+            </div>
+            <div>
+                <button onclick="openModal()" class="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2">
+                    <i class="fas fa-plus"></i> <span class="hidden sm:inline">Thêm Gia Sư</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div id="loading-spinner" class="flex flex-col items-center justify-center py-20 text-blue-600">
+            <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
+            <p class="font-medium animate-pulse" id="loading-text">Đang kết nối hệ thống thời gian thực...</p>
+        </div>
+
+        <div id="tutors-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
+
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-slate-400">
+            <i class="fas fa-users-slash text-6xl mb-4"></i>
+            <p class="text-lg">Chưa có gia sư nào trên hệ thống.</p>
+        </div>
+    </main>
+
+    <div id="tutor-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-slate-100 px-6 py-4 border-b flex justify-between items-center">
+                <h2 id="modal-title" class="text-lg font-bold text-slate-800">Thông Tin Gia Sư</h2>
+                <button onclick="closeModal()" class="text-slate-500 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto">
+                <form id="tutor-form" class="space-y-4">
+                    <input type="hidden" id="tutor-id">
+                    <input type="hidden" id="old-avatar-base64">
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Họ và tên *</label>
+                        <input type="text" id="f-name" required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Số điện thoại *</label>
+                            <input type="tel" id="f-phone" required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Môn dạy *</label>
+                            <input type="text" id="f-subject" placeholder="VD: Toán, Lý, Hóa..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Trình độ</label>
+                            <select id="f-level" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                                <option value="Sinh viên">Sinh viên</option>
+                                <option value="Giáo viên">Giáo viên</option>
+                                <option value="Chuyên gia">Chuyên gia</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Khu vực</label>
+                            <input type="text" id="f-area" placeholder="VD: Cầu Giấy, Hà Nội" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Ảnh đại diện (Sẽ tự động nén)</label>
+                        <input type="file" id="f-avatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <div id="avatar-preview-container" class="mt-2 hidden">
+                            <img id="avatar-preview" class="w-20 h-20 object-cover rounded-full border-2 border-blue-200">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="bg-slate-50 px-6 py-4 border-t flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-5 py-2.5 rounded-lg text-slate-600 font-medium hover:bg-slate-200 transition-colors">Hủy</button>
+                <button onclick="saveTutor()" id="btn-save" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+                    <i class="fas fa-save"></i> Lưu Dữ Liệu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        // Cấu hình URL đã được lấy tự động từ hệ thống của bạn
+        const SUPABASE_URL = 'https://kvlhnuvtetnhnjdlexdl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2bGhudXZ0ZXRuaG5qZGxleGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MzczMzUsImV4cCI6MjA5ODQxMzMzNX0.s3sWY-JiDUIwx4VnC1YF9Pd8Lg7UOoc7jZ_YrtnAyAA';
+
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let tutorsList = [];
+
+        window.showToast = function(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const isSuccess = type === 'success';
+            toast.className = `toast-enter pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white ${isSuccess ? 'bg-emerald-500' : 'bg-red-500'}`;
+            toast.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'} text-xl"></i><span class="font-medium">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.replace('toast-enter', 'toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        // 1. Tải dữ liệu từ Supabase
+        async function fetchTutors() {
+            const { data, error } = await supabaseClient
+                .from('tutors')
+                .select('*')
+                .order('timestamp', { ascending: false });
+
+            if (error) {
+                console.error("Lỗi:", error);
+                document.getElementById('loading-text').innerText = "Vui lòng cập nhật Anon Key hoặc kiểm tra dữ liệu bảng!";
+                document.getElementById('loading-text').className = "text-red-500 font-bold";
+                return;
+            }
+
+            document.getElementById('loading-spinner').style.display = 'none';
+            tutorsList = data || [];
+            renderTutors();
+        }
+
+        // 2. Đồng bộ thời gian thực (Real-time)
+        if (!SUPABASE_ANON_KEY.includes('DÁN_MÃ_ANON_KEY')) {
+            supabaseClient
+                .channel('public:tutors')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'tutors' }, (payload) => {
+                    fetchTutors();
+                })
+                .subscribe((status) => {
+                    if(status === 'SUBSCRIBED') console.log('Đã kết nối Real-time thành công!');
+                });
+        }
+
+        // 3. Render giao diện
+        function renderTutors() {
+            const grid = document.getElementById('tutors-grid');
+            const emptyState = document.getElementById('empty-state');
+            grid.innerHTML = '';
+            
+            if (tutorsList.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+            grid.classList.remove('hidden');
+
+            tutorsList.forEach(tutor => {
+                const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=0D8ABC&color=fff";
+                const avatar = tutor.avatarBase64 || defaultAvatar;
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow group relative";
+                card.innerHTML = `
+                    <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button onclick="editTutor('${tutor.id}')" class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors"><i class="fas fa-pen text-sm"></i></button>
+                        <button onclick="confirmDelete('${tutor.id}')" class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors"><i class="fas fa-trash text-sm"></i></button>
+                    </div>
+                    <div class="p-5 flex flex-col items-center">
+                        <img src="${avatar}" class="w-24 h-24 rounded-full object-cover border-4 border-blue-50 shadow-sm mb-4">
+                        <h3 class="text-lg font-bold text-slate-800 text-center w-full truncate">${tutor.name}</h3>
+                        <p class="text-sm font-medium text-blue-600 mb-4">${tutor.subject}</p>
+                        <div class="w-full space-y-2 text-sm text-slate-600">
+                            <div class="flex items-center gap-3"><div class="w-6 text-center"><i class="fas fa-phone-alt text-slate-400"></i></div><span>${tutor.phone}</span></div>
+                            <div class="flex items-center gap-3"><div class="w-6 text-center"><i class="fas fa-map-marker-alt text-slate-400"></i></div><span>${tutor.area || '...'}</span></div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.openModal = function() {
+            document.getElementById('tutor-modal').classList.remove('hidden');
+            document.getElementById('tutor-modal').classList.add('flex');
+            document.getElementById('tutor-form').reset();
+            document.getElementById('tutor-id').value = '';
+            document.getElementById('old-avatar-base64').value = '';
+            document.getElementById('avatar-preview-container').classList.add('hidden');
+            document.getElementById('modal-title').innerText = 'Thêm Gia Sư Mới';
+        };
+
+        window.closeModal = function() {
+            document.getElementById('tutor-modal').classList.add('hidden');
+            document.getElementById('tutor-modal').classList.remove('flex');
+        };
+
+        window.editTutor = function(id) {
+            const tutor = tutorsList.find(t => t.id === id);
+            if (!tutor) return;
+            openModal();
+            document.getElementById('modal-title').innerText = 'Chỉnh Sửa Thông Tin';
+            document.getElementById('tutor-id').value = tutor.id;
+            document.getElementById('f-name').value = tutor.name;
+            document.getElementById('f-phone').value = tutor.phone;
+            document.getElementById('f-subject').value = tutor.subject;
+            document.getElementById('f-level').value = tutor.level;
+            document.getElementById('f-area').value = tutor.area;
+            document.getElementById('old-avatar-base64').value = tutor.avatarBase64 || '';
+            if (tutor.avatarBase64) {
+                document.getElementById('avatar-preview').src = tutor.avatarBase64;
+                document.getElementById('avatar-preview-container').classList.remove('hidden');
+            }
+        };
+
+        window.compressImage = function(file) {
+            return new Promise((resolve) => {
+                if (!file) resolve(null);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const max = 300;
+                        let w = img.width, h = img.height;
+                        if (w > max || h > max) {
+                            if (w > h) { h = Math.round((h * max) / w); w = max; } 
+                            else { w = Math.round((w * max) / h); h = max; }
+                        }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6)); 
+                    };
+                };
+            });
+        };
+
+        document.getElementById('f-avatar').addEventListener('change', async function(e) {
+            const base64 = await compressImage(e.target.files[0]);
+            if (base64) {
+                document.getElementById('avatar-preview').src = base64;
+                document.getElementById('avatar-preview-container').classList.remove('hidden');
+            }
+        });
+
+        // 4. Lưu dữ liệu (Upsert)
+        window.saveTutor = async function() {
+            if (SUPABASE_ANON_KEY.includes('DÁN_MÃ_ANON_KEY')) { showToast("Vui lòng điền API Key Supabase vào code!", "error"); return; }
+            
+            const name = document.getElementById('f-name').value.trim();
+            const phone = document.getElementById('f-phone').value.trim();
+            const subject = document.getElementById('f-subject').value.trim();
+            
+            if (!name || !phone || !subject) { showToast("Điền đủ các trường bắt buộc (*)", "error"); return; }
+
+            const btnSave = document.getElementById('btn-save');
+            btnSave.disabled = true;
+            btnSave.innerHTML = 'Đang lưu...';
+
+            try {
+                const avatarFile = document.getElementById('f-avatar').files[0];
+                let avatarBase64 = document.getElementById('old-avatar-base64').value;
+                if (avatarFile) avatarBase64 = await compressImage(avatarFile);
+
+                const id = document.getElementById('tutor-id').value || crypto.randomUUID();
+                
+                const tutorData = {
+                    id: id,
+                    name, phone, subject,
+                    level: document.getElementById('f-level').value,
+                    area: document.getElementById('f-area').value,
+                    avatarBase64: avatarBase64,
+                    timestamp: Date.now()
+                };
+
+                const { error } = await supabaseClient.from('tutors').upsert(tutorData);
+                if (error) throw error;
+
+                showToast("Đã cập nhật hệ thống!");
+                closeModal();
+            } catch (e) {
+                console.error(e);
+                showToast("Lỗi đồng bộ dữ liệu", "error");
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = '<i class="fas fa-save"></i> Lưu Dữ Liệu';
+            }
+        };
+
+        window.confirmDelete = function(id) {
+            if(confirm("Bạn có chắc muốn xóa gia sư này khỏi hệ thống?")) {
+                deleteTutor(id);
+            }
+        }
+
+        window.deleteTutor = async function(id) {
+            const { error } = await supabaseClient.from('tutors').delete().eq('id', id);
+            if (error) {
+                showToast("Lỗi khi xóa", "error");
+            } else {
+                showToast("Đã xóa gia sư!");
+            }
+        };
+
+        fetchTutors();
+    </script>
+</body>
+</html>
