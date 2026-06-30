@@ -17,11 +17,28 @@
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
         .toast-enter { animation: slideIn 0.3s ease-out forwards; }
         .toast-exit { animation: fadeOut 0.3s ease-out forwards; }
+        
+        /* Custom ribbon styling */
+        .ribbon {
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            width: 130px;
+            background: #f59e0b; /* Amber 500 */
+            color: white;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 0;
+            transform: rotate(45deg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-10">
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-20">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <i class="fas fa-chalkboard-teacher text-2xl"></i>
@@ -50,7 +67,7 @@
     </main>
 
     <div id="tutor-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-slate-100 px-6 py-4 border-b flex justify-between items-center">
                 <h2 id="modal-title" class="text-lg font-bold text-slate-800">Thông Tin Gia Sư</h2>
                 <button onclick="closeModal()" class="text-slate-500 hover:text-red-500 transition-colors">
@@ -63,43 +80,52 @@
                     <input type="hidden" id="tutor-id">
                     <input type="hidden" id="old-avatar-base64">
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Họ và tên *</label>
-                        <input type="text" id="f-name" required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Họ và tên *</label>
+                            <input type="text" id="f-name" required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Số điện thoại *</label>
                             <input type="tel" id="f-phone" required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Môn dạy *</label>
-                            <input type="text" id="f-subject" placeholder="VD: Toán, Lý, Hóa..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
-                        </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Trình độ</label>
-                            <select id="f-level" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                                <option value="Sinh viên">Sinh viên</option>
-                                <option value="Giáo viên">Giáo viên</option>
-                                <option value="Chuyên gia">Chuyên gia</option>
-                            </select>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Môn dạy *</label>
+                            <input type="text" id="f-subject" placeholder="VD: Toán, Lý, Hóa..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Khu vực</label>
-                            <input type="text" id="f-area" placeholder="VD: Cầu Giấy, Hà Nội" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Số lớp đã mở</label>
+                            <input type="number" id="f-classes" value="0" min="0" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Ảnh đại diện (Sẽ tự động nén)</label>
-                        <input type="file" id="f-avatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <div id="avatar-preview-container" class="mt-2 hidden">
-                            <img id="avatar-preview" class="w-20 h-20 object-cover rounded-full border-2 border-blue-200">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Giới thiệu ngắn (Bio)</label>
+                        <textarea id="f-bio" rows="2" placeholder="VD: Tôi hiện đang dạy tiếng Anh online..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Ảnh đại diện</label>
+                            <input type="file" id="f-avatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                         </div>
+                        <div class="flex flex-col justify-center gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="f-sponsored" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                                <span class="text-sm font-medium text-slate-700">Hiển thị thẻ Tài trợ (Sponsored)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="f-verified" class="w-4 h-4 text-emerald-500 rounded border-slate-300 focus:ring-emerald-500">
+                                <span class="text-sm font-medium text-slate-700">Đã xác minh (Tick xanh)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="avatar-preview-container" class="mt-1 hidden">
+                        <img id="avatar-preview" class="w-16 h-16 object-cover rounded-full border-2 border-blue-200">
                     </div>
                 </form>
             </div>
@@ -116,7 +142,6 @@
     <div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
     <script>
-        // Cấu hình URL đã được lấy tự động từ hệ thống của bạn
         const SUPABASE_URL = 'https://kvlhnuvtetnhnjdlexdl.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2bGhudXZ0ZXRuaG5qZGxleGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MzczMzUsImV4cCI6MjA5ODQxMzMzNX0.s3sWY-JiDUIwx4VnC1YF9Pd8Lg7UOoc7jZ_YrtnAyAA';
 
@@ -136,7 +161,6 @@
             }, 3000);
         };
 
-        // 1. Tải dữ liệu từ Supabase
         async function fetchTutors() {
             const { data, error } = await supabaseClient
                 .from('tutors')
@@ -155,7 +179,6 @@
             renderTutors();
         }
 
-        // 2. Đồng bộ thời gian thực (Real-time)
         if (!SUPABASE_ANON_KEY.includes('DÁN_MÃ_ANON_KEY')) {
             supabaseClient
                 .channel('public:tutors')
@@ -167,7 +190,7 @@
                 });
         }
 
-        // 3. Render giao diện
+        // Render giao diện theo mẫu
         function renderTutors() {
             const grid = document.getElementById('tutors-grid');
             const emptyState = document.getElementById('empty-state');
@@ -185,23 +208,45 @@
             grid.classList.remove('hidden');
 
             tutorsList.forEach(tutor => {
-                const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=0D8ABC&color=fff";
+                const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=c7d2fe&color=3730a3";
                 const avatar = tutor.avatarBase64 || defaultAvatar;
-
+                
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow group relative";
+                card.className = "bg-white rounded-[20px] border-[2px] border-[#4a8df8] overflow-hidden hover:shadow-lg transition-all group relative flex flex-col pt-8";
+                
+                // Mã HTML nội dung của Card
                 card.innerHTML = `
-                    <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                        <button onclick="editTutor('${tutor.id}')" class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors"><i class="fas fa-pen text-sm"></i></button>
-                        <button onclick="confirmDelete('${tutor.id}')" class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors"><i class="fas fa-trash text-sm"></i></button>
+                    ${tutor.sponsored ? '<div class="ribbon">Sponsored</div>' : ''}
+                    
+                    <div class="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                        <button onclick="editTutor('${tutor.id}')" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors shadow-sm"><i class="fas fa-pen text-xs"></i></button>
+                        <button onclick="confirmDelete('${tutor.id}')" class="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors shadow-sm"><i class="fas fa-trash text-xs"></i></button>
                     </div>
-                    <div class="p-5 flex flex-col items-center">
-                        <img src="${avatar}" class="w-24 h-24 rounded-full object-cover border-4 border-blue-50 shadow-sm mb-4">
-                        <h3 class="text-lg font-bold text-slate-800 text-center w-full truncate">${tutor.name}</h3>
-                        <p class="text-sm font-medium text-blue-600 mb-4">${tutor.subject}</p>
-                        <div class="w-full space-y-2 text-sm text-slate-600">
-                            <div class="flex items-center gap-3"><div class="w-6 text-center"><i class="fas fa-phone-alt text-slate-400"></i></div><span>${tutor.phone}</span></div>
-                            <div class="flex items-center gap-3"><div class="w-6 text-center"><i class="fas fa-map-marker-alt text-slate-400"></i></div><span>${tutor.area || '...'}</span></div>
+                    
+                    <div class="px-6 flex flex-col items-center flex-grow z-0">
+                        <div class="w-24 h-24 rounded-full bg-indigo-100 p-1 mb-4">
+                            <img src="${avatar}" class="w-full h-full rounded-full object-cover shadow-sm">
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-[#2a303c] text-center w-full truncate mb-2">${tutor.name}</h3>
+                        
+                        <p class="text-[15px] text-[#6b7280] text-center line-clamp-3 mb-5 min-h-[66px] leading-relaxed">
+                            ${tutor.bio || 'Chưa có thông tin giới thiệu.'}
+                        </p>
+                        
+                        <div class="text-[16px] font-bold text-[#374151] mb-5">
+                            Số lớp đã mở: <span class="font-normal">${tutor.classes || 0}</span>
+                        </div>
+                        
+                        <a href="tel:${tutor.phone}" class="flex items-center gap-2 text-[#fb7185] text-lg font-medium hover:text-rose-600 transition-colors mb-6">
+                            <i class="fas fa-phone-alt"></i> Gọi ngay
+                        </a>
+                    </div>
+                    
+                    <div class="mt-auto px-6 pb-6 w-full">
+                        <div class="flex h-12 w-full rounded-lg overflow-hidden shadow-sm cursor-pointer hover:shadow-md transition-all">
+                            <button class="flex-grow bg-[#7a6ff0] text-white font-medium hover:bg-[#685ce6] transition-colors text-base">Xem hồ sơ</button>
+                            ${tutor.verified ? `<div class="bg-[#22c55e] w-12 flex items-center justify-center"><i class="fas fa-check text-white text-lg"></i></div>` : ''}
                         </div>
                     </div>
                 `;
@@ -215,6 +260,9 @@
             document.getElementById('tutor-form').reset();
             document.getElementById('tutor-id').value = '';
             document.getElementById('old-avatar-base64').value = '';
+            document.getElementById('f-classes').value = '0';
+            document.getElementById('f-sponsored').checked = false;
+            document.getElementById('f-verified').checked = false;
             document.getElementById('avatar-preview-container').classList.add('hidden');
             document.getElementById('modal-title').innerText = 'Thêm Gia Sư Mới';
         };
@@ -230,12 +278,15 @@
             openModal();
             document.getElementById('modal-title').innerText = 'Chỉnh Sửa Thông Tin';
             document.getElementById('tutor-id').value = tutor.id;
-            document.getElementById('f-name').value = tutor.name;
-            document.getElementById('f-phone').value = tutor.phone;
-            document.getElementById('f-subject').value = tutor.subject;
-            document.getElementById('f-level').value = tutor.level;
-            document.getElementById('f-area').value = tutor.area;
+            document.getElementById('f-name').value = tutor.name || '';
+            document.getElementById('f-phone').value = tutor.phone || '';
+            document.getElementById('f-subject').value = tutor.subject || '';
+            document.getElementById('f-bio').value = tutor.bio || '';
+            document.getElementById('f-classes').value = tutor.classes || 0;
+            document.getElementById('f-sponsored').checked = tutor.sponsored || false;
+            document.getElementById('f-verified').checked = tutor.verified || false;
             document.getElementById('old-avatar-base64').value = tutor.avatarBase64 || '';
+            
             if (tutor.avatarBase64) {
                 document.getElementById('avatar-preview').src = tutor.avatarBase64;
                 document.getElementById('avatar-preview-container').classList.remove('hidden');
@@ -274,7 +325,6 @@
             }
         });
 
-        // 4. Lưu dữ liệu (Upsert)
         window.saveTutor = async function() {
             if (SUPABASE_ANON_KEY.includes('DÁN_MÃ_ANON_KEY')) { showToast("Vui lòng điền API Key Supabase vào code!", "error"); return; }
             
@@ -295,11 +345,16 @@
 
                 const id = document.getElementById('tutor-id').value || crypto.randomUUID();
                 
+                // Thu thập các dữ liệu mới
                 const tutorData = {
                     id: id,
-                    name, phone, subject,
-                    level: document.getElementById('f-level').value,
-                    area: document.getElementById('f-area').value,
+                    name: name,
+                    phone: phone,
+                    subject: subject,
+                    bio: document.getElementById('f-bio').value.trim(),
+                    classes: parseInt(document.getElementById('f-classes').value) || 0,
+                    sponsored: document.getElementById('f-sponsored').checked,
+                    verified: document.getElementById('f-verified').checked,
                     avatarBase64: avatarBase64,
                     timestamp: Date.now()
                 };
@@ -311,7 +366,7 @@
                 closeModal();
             } catch (e) {
                 console.error(e);
-                showToast("Lỗi đồng bộ dữ liệu", "error");
+                showToast("Lỗi đồng bộ dữ liệu. Hãy kiểm tra cấu trúc bảng Supabase", "error");
             } finally {
                 btnSave.disabled = false;
                 btnSave.innerHTML = '<i class="fas fa-save"></i> Lưu Dữ Liệu';
