@@ -35,9 +35,9 @@
                     <i class="fas fa-user-plus"></i> <span>Đăng kí làm gia sư</span>
                 </a>
 
-                <button id="btn-feedback" onclick="openFeedbackModal()" class="bg-white/15 text-white hover:bg-white/25 border border-white/40 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
-                    <i class="fas fa-comment-alt"></i> <span>Phản hồi</span>
-                </button>
+               <a id="btn-feedback" href="https://fomr.io/s/8gknGy9i88" target="_blank" class="bg-white/15 text-white hover:bg-white/25 border border-white/40 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
+    <i class="fas fa-comment-alt"></i> <span>Phản hồi</span>
+</a>
 
                 <button id="btn-admin-login" onclick="loginAdmin()" class="bg-slate-800 text-white hover:bg-slate-900 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
                     <i class="fas fa-lock"></i> <span>Admin</span>
@@ -55,35 +55,46 @@
     </header>
 
     <div class="bg-white shadow-sm border-b z-20">
-        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div class="relative w-full md:w-1/3">
+        <div class="container mx-auto px-4 py-4 flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full lg:w-1/4">
                 <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
                 <input type="text" id="filter-search" onkeyup="applyFilters()" placeholder="Tìm tên hoặc môn học..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-red-500 outline-none transition-all">
             </div>
             
-            <div class="flex flex-wrap items-center w-full md:w-auto gap-3">
-                <select id="filter-level" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
+            <div class="flex flex-wrap items-center w-full lg:w-auto gap-3">
+                <select id="filter-mode" onchange="applyFilters()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0 text-sm">
+                    <option value="">Tất cả hình thức</option>
+                    <option value="Online & Offline">Online & Offline</option>
+                    <option value="Chỉ Online">Chỉ Online</option>
+                    <option value="Chỉ Offline">Chỉ Offline</option>
+                </select>
+
+                <select id="filter-level" onchange="applyFilters()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0 text-sm">
                     <option value="">Tất cả trình độ</option>
                     <option value="Sinh viên">Sinh viên</option>
                     <option value="Giáo viên">Giáo viên</option>
                     <option value="Chuyên gia">Chuyên gia</option>
                 </select>
                 
-                <select id="filter-area" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
+                <select id="filter-area" onchange="applyFilters()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0 text-sm">
                     <option value="">Tất cả khu vực</option>
                     <option value="Hà Nội">Hà Nội</option>
                     <option value="TP.HCM">TP.HCM</option>
                     <option value="Đà Nẵng">Đà Nẵng</option>
+                    <option value="Hải Phòng">Hải Phòng</option>
+                    <option value="Cần Thơ">Cần Thơ</option>
+                    <option value="Bình Dương">Bình Dương</option>
+                    <option value="Đồng Nai">Đồng Nai</option>
                     <option value="Khác">Khác</option>
                 </select>
 
-                <select id="filter-sort" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
+                <select id="filter-sort" onchange="applyFilters()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0 text-sm">
                     <option value="newest">Mới nhất</option>
-                    <option value="classes">Số lớp đã mở (nhiều nhất)</option>
+                    <option value="classes">Số HS học (nhiều nhất)</option>
                     <option value="name">Tên A-Z</option>
                 </select>
 
-                <button id="btn-fav-filter" onclick="toggleFavFilter()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-500 hover:text-red-600 hover:border-red-300 outline-none transition-all flex items-center gap-2 flex-grow md:flex-grow-0 justify-center">
+                <button id="btn-fav-filter" onclick="toggleFavFilter()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-500 hover:text-red-600 hover:border-red-300 outline-none transition-all flex items-center gap-2 flex-grow md:flex-grow-0 justify-center text-sm">
                     <i class="fas fa-star"></i> <span>Yêu thích</span>
                 </button>
             </div>
@@ -134,7 +145,7 @@
     </div>
 
     <div id="tutor-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[95vh]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[95vh]">
             <div class="bg-slate-100 px-6 py-4 border-b flex justify-between items-center">
                 <h2 id="modal-title" class="text-xl font-bold text-slate-800">Thêm Gia Sư Mới</h2>
                 <button onclick="closeModal()" class="text-slate-500 hover:text-red-500 transition-colors w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center">
@@ -164,12 +175,12 @@
                             <input type="text" id="f-subject" placeholder="VD: Toán, Tiếng Anh giao tiếp..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Số lớp đã mở</label>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Số học sinh học</label>
                             <input type="number" id="f-classes" value="0" min="0" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Trình độ</label>
                             <select id="f-level" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white">
@@ -184,7 +195,19 @@
                                 <option value="Hà Nội">Hà Nội</option>
                                 <option value="TP.HCM">TP.HCM</option>
                                 <option value="Đà Nẵng">Đà Nẵng</option>
-                                <option value="Khác">Khu vực khác / Online</option>
+                                <option value="Hải Phòng">Hải Phòng</option>
+                                <option value="Cần Thơ">Cần Thơ</option>
+                                <option value="Bình Dương">Bình Dương</option>
+                                <option value="Đồng Nai">Đồng Nai</option>
+                                <option value="Khác">Khu vực khác</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Hình thức dạy</label>
+                            <select id="f-mode" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white">
+                                <option value="Online & Offline">Online & Offline</option>
+                                <option value="Chỉ Online">Chỉ Online</option>
+                                <option value="Chỉ Offline">Chỉ Offline</option>
                             </select>
                         </div>
                     </div>
@@ -202,14 +225,14 @@
                                 <img id="avatar-preview" class="w-16 h-16 object-cover rounded-full border-2 border-red-400 shadow-sm">
                             </div>
                         </div>
-                        <div class="flex flex-col justify-center gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1">Chuyên môn nổi bật</label>
-                                <input type="text" id="f-specialty" placeholder="VD: Luyện thi IELTS, Toán nâng cao..." class="w-full border-slate-300 rounded-lg p-2 text-sm border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
-                            </div>
+                        <div class="flex flex-col justify-center gap-4">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" id="f-specialty" class="w-5 h-5 text-amber-500 rounded border-slate-300 focus:ring-amber-500 transition-all cursor-pointer">
+                                <span class="text-sm font-bold text-slate-700 group-hover:text-amber-500 transition-colors">Gia sư có Chuyên Môn giỏi</span>
+                            </label>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="f-verified" class="w-5 h-5 text-emerald-500 rounded border-slate-300 focus:ring-emerald-500 transition-all cursor-pointer">
-                                <span class="text-sm font-medium text-slate-700 group-hover:text-emerald-500 transition-colors">Tick xanh Xác minh (Verified)</span>
+                                <span class="text-sm font-bold text-slate-700 group-hover:text-emerald-500 transition-colors">Tick xanh Xác minh (Verified)</span>
                             </label>
                         </div>
                     </div>
@@ -270,15 +293,13 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        let tutorsList = []; // Dữ liệu gốc
-        let isAdmin = false; // Phân quyền Admin
-        let favOnly = false; // Chỉ hiện gia sư yêu thích
+        let tutorsList = []; 
+        let isAdmin = false; 
+        let favOnly = false; 
 
-        // TÍNH NĂNG YÊU THÍCH (lưu trên trình duyệt)
         window.getFavorites = function() {
-            try {
-                return JSON.parse(localStorage.getItem('gsxuho_favorites') || '[]');
-            } catch (e) { return []; }
+            try { return JSON.parse(localStorage.getItem('gsxuho_favorites') || '[]'); } 
+            catch (e) { return []; }
         };
 
         window.toggleFavorite = function(id) {
@@ -307,7 +328,6 @@
             applyFilters();
         };
 
-        // HÀM HIỂN THỊ THÔNG BÁO
         window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -321,7 +341,6 @@
             }, 3000);
         };
 
-        // ADMIN LOGIN / LOGOUT
         window.loginAdmin = function() {
             const password = prompt("Vui lòng nhập mật khẩu quản trị viên (Mật khẩu là: adimvip):");
             if (password === 'adimvip') {
@@ -353,10 +372,9 @@
                 btnAdd.classList.add('hidden');
                 btnLogout.classList.add('hidden');
             }
-            applyFilters(); // Render lại danh sách để hiện/ẩn nút sửa xóa
+            applyFilters();
         }
 
-        // FETCH VÀ LỌC DỮ LIỆU
         async function fetchTutors() {
             const { data, error } = await supabaseClient
                 .from('tutors')
@@ -379,6 +397,7 @@
             const searchText = document.getElementById('filter-search').value.toLowerCase();
             const levelFilter = document.getElementById('filter-level').value;
             const areaFilter = document.getElementById('filter-area').value;
+            const modeFilter = document.getElementById('filter-mode').value;
             const sortBy = document.getElementById('filter-sort').value;
             const favs = getFavorites();
 
@@ -387,7 +406,17 @@
                 const matchLevel = levelFilter === "" || tutor.level === levelFilter;
                 const matchArea = areaFilter === "" || tutor.area === areaFilter;
                 const matchFav = !favOnly || favs.includes(tutor.id);
-                return matchSearch && matchLevel && matchArea && matchFav;
+                
+                let matchMode = true;
+                if (modeFilter !== "") {
+                    if (modeFilter === "Chỉ Online" || modeFilter === "Chỉ Offline") {
+                        matchMode = (tutor.mode === modeFilter || tutor.mode === "Online & Offline");
+                    } else {
+                        matchMode = (tutor.mode === modeFilter);
+                    }
+                }
+
+                return matchSearch && matchLevel && matchArea && matchFav && matchMode;
             });
 
             if (sortBy === 'classes') {
@@ -403,7 +432,6 @@
             renderTutors(filteredList);
         }
 
-        // VẼ GIAO DIỆN THẺ GIA SƯ
         function renderTutors(listToRender) {
             const grid = document.getElementById('tutors-grid');
             const emptyState = document.getElementById('empty-state');
@@ -424,11 +452,12 @@
                 const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=fee2e2&color=b91c1c&size=200";
                 const avatar = tutor.avatarBase64 || defaultAvatar;
                 
-                // Lấy các chữ số từ SĐT để gán link Zalo / gọi điện
                 const zaloPhone = (tutor.phone || '').replace(/\D/g, ''); 
                 const isFav = getFavorites().includes(tutor.id);
 
-                // Nút công cụ chỉ hiện khi là Admin
+                // Check hiển thị băng rôn chuyên môn (Tương thích với dữ liệu cũ dạng chữ)
+                const isSpecial = tutor.specialty === true || tutor.specialty === 'true' || (typeof tutor.specialty === 'string' && tutor.specialty.trim() !== '');
+
                 const adminTools = isAdmin ? `
                     <div class="absolute top-2 left-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                         <button onclick="editTutor('${tutor.id}')" class="w-7 h-7 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors shadow-md border border-red-100"><i class="fas fa-pen text-[10px]"></i></button>
@@ -437,9 +466,11 @@
                 ` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl border-[2px] border-red-500 overflow-hidden hover:shadow-xl transition-all duration-300 group relative flex flex-col pt-5 bg-gradient-to-b from-white to-slate-50";
+                card.className = "bg-white rounded-2xl border-[2px] border-red-500 overflow-hidden hover:shadow-xl transition-all duration-300 group relative flex flex-col pt-6 bg-gradient-to-b from-white to-slate-50";
                 
                 card.innerHTML = `
+                    ${isSpecial ? `<div class="absolute top-0 inset-x-0 flex justify-center z-10"><span class="bg-gradient-to-r from-amber-400 to-amber-500 text-white text-[10px] font-bold px-4 py-0.5 rounded-b-lg shadow-sm"><i class="fas fa-crown mr-1"></i>Chuyên Môn Nổi Bật</span></div>` : ''}
+                    
                     ${adminTools}
 
                     <button onclick="toggleFavorite('${tutor.id}')" class="absolute top-2 right-2 z-20 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-md border border-slate-100 hover:scale-110 transition-transform" title="Yêu thích">
@@ -459,13 +490,13 @@
                         </p>
                         
                         <div class="flex flex-wrap justify-center gap-1 mb-2 text-[10px] font-medium text-slate-500">
-                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md"><i class="fas fa-graduation-cap mr-0.5"></i>${tutor.level || 'Chưa cập nhật'}</span>
-                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md"><i class="fas fa-map-marker-alt mr-0.5"></i>${tutor.area || 'Chưa cập nhật'}</span>
-                            ${tutor.specialty ? `<span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md font-semibold"><i class="fas fa-star mr-0.5"></i>${tutor.specialty}</span>` : ''}
+                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md border"><i class="fas fa-graduation-cap mr-0.5 text-slate-400"></i>${tutor.level || 'Chưa cập nhật'}</span>
+                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md border"><i class="fas fa-map-marker-alt mr-0.5 text-slate-400"></i>${tutor.area || 'Chưa cập nhật'}</span>
+                            <span class="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded-md border border-blue-100"><i class="fas fa-laptop-house mr-0.5"></i>${tutor.mode || 'Online & Offline'}</span>
                         </div>
 
                         <div class="text-[12px] font-bold text-[#374151] mb-2 bg-slate-100 px-2.5 py-1 rounded-lg">
-                            Lớp: <span class="text-red-600 font-extrabold ml-0.5">${tutor.classes || 0}</span>
+                            Học sinh: <span class="text-red-600 font-extrabold ml-0.5">${tutor.classes || 0}</span>
                         </div>
                         
                         <div class="flex items-center justify-center gap-3 mb-3">
@@ -481,7 +512,7 @@
                     <div class="mt-auto px-3 pb-3 w-full">
                         <div class="flex h-[38px] w-full rounded-lg overflow-hidden shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all">
                             <button onclick="viewProfile('${tutor.id}')" class="flex-grow bg-red-600 text-white font-bold hover:bg-red-700 transition-colors text-[12px]">Xem hồ sơ</button>
-                            ${tutor.verified ? `<div class="bg-[#22c55e] w-[38px] flex items-center justify-center border-l border-[#1fa750]"><i class="fas fa-check text-white text-sm"></i></div>` : ''}
+                            ${tutor.verified ? `<div class="bg-[#22c55e] w-[38px] flex items-center justify-center border-l border-[#1fa750]" title="Đã xác minh"><i class="fas fa-check text-white text-sm"></i></div>` : ''}
                         </div>
                     </div>
                 `;
@@ -489,9 +520,6 @@
             });
         }
 
-        /* ----------------------------------------------------
-           TÍNH NĂNG XEM HỒ SƠ & UPLOAD ẢNH (MỚI) 
-        ----------------------------------------------------- */
         window.viewProfile = function(id) {
             const tutor = tutorsList.find(t => t.id === id);
             if (!tutor) return;
@@ -499,7 +527,8 @@
             const profileContent = document.getElementById('profile-content');
             const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name) + "&background=c7d2fe&color=3730a3&size=200";
             
-            // Xử lý hiển thị thư viện ảnh (gallery)
+            const isSpecial = tutor.specialty === true || tutor.specialty === 'true' || (typeof tutor.specialty === 'string' && tutor.specialty.trim() !== '');
+
             let galleryHTML = '';
             const gallery = tutor.gallery || [];
             if (gallery.length > 0) {
@@ -515,7 +544,6 @@
                 galleryHTML = `<p class="text-slate-500 text-sm mt-2 italic">Chưa có ảnh bằng cấp/hoạt động nào.</p>`;
             }
 
-            // Nếu là Admin, hiển thị thêm form Upload ảnh
             const adminUploadHTML = isAdmin ? `
                 <div class="mt-4 p-5 bg-red-50 border border-red-100 rounded-xl">
                     <h4 class="font-bold text-red-800 mb-3"><i class="fas fa-cloud-upload-alt mr-2"></i>Quản lý ảnh (Chỉ Admin)</h4>
@@ -527,17 +555,20 @@
                 </div>
             ` : '';
 
-            // Đổ dữ liệu HTML vào khung Modal
             profileContent.innerHTML = `
                 <div class="flex flex-col sm:flex-row items-center gap-5 border-b pb-6">
                     <img src="${tutor.avatarBase64 || defaultAvatar}" class="w-28 h-28 rounded-full object-cover border-4 border-red-100 shadow-md">
                     <div class="text-center sm:text-left">
-                        <h3 class="text-2xl font-extrabold text-slate-800">${tutor.name} ${tutor.verified ? '<i class="fas fa-check-circle text-emerald-500 text-xl ml-1" title="Đã xác minh"></i>' : ''}</h3>
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <h3 class="text-2xl font-extrabold text-slate-800">${tutor.name}</h3>
+                            ${tutor.verified ? '<i class="fas fa-check-circle text-emerald-500 text-xl" title="Đã xác minh"></i>' : ''}
+                        </div>
                         <p class="text-red-600 font-bold text-lg mt-1">${tutor.subject}</p>
-                        <div class="flex flex-wrap justify-center sm:justify-start gap-3 mt-3 text-sm font-medium text-slate-600">
-                            <span class="bg-slate-100 px-3 py-1 rounded-full"><i class="fas fa-graduation-cap mr-1 text-slate-400"></i>${tutor.level || 'Chưa cập nhật'}</span>
-                            <span class="bg-slate-100 px-3 py-1 rounded-full"><i class="fas fa-map-marker-alt mr-1 text-slate-400"></i>${tutor.area || 'Chưa cập nhật'}</span>
-                            ${tutor.specialty ? `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-semibold"><i class="fas fa-star mr-1"></i>${tutor.specialty}</span>` : ''}
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-2 mt-3 text-sm font-medium text-slate-600">
+                            <span class="bg-slate-100 px-3 py-1 rounded-full border"><i class="fas fa-graduation-cap mr-1 text-slate-400"></i>${tutor.level || 'Chưa cập nhật'}</span>
+                            <span class="bg-slate-100 px-3 py-1 rounded-full border"><i class="fas fa-map-marker-alt mr-1 text-slate-400"></i>${tutor.area || 'Chưa cập nhật'}</span>
+                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100"><i class="fas fa-laptop-house mr-1"></i>${tutor.mode || 'Online & Offline'}</span>
+                            ${isSpecial ? `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-bold border border-amber-200"><i class="fas fa-crown mr-1"></i>Chuyên môn nổi bật</span>` : ''}
                         </div>
                     </div>
                 </div>
@@ -545,6 +576,9 @@
                 <div class="bg-slate-50 p-4 rounded-xl border">
                     <h4 class="font-bold text-slate-800 mb-2 border-l-4 border-red-500 pl-2">Giới thiệu bản thân</h4>
                     <p class="text-slate-600 whitespace-pre-wrap leading-relaxed">${tutor.bio || 'Chưa có thông tin giới thiệu chi tiết về gia sư này.'}</p>
+                    <div class="mt-4 pt-3 border-t text-sm font-bold text-slate-700">
+                        Số lượng học sinh đã/đang học: <span class="text-red-600 text-lg ml-1">${tutor.classes || 0}</span> học sinh
+                    </div>
                 </div>
                 
                 <div>
@@ -563,7 +597,6 @@
             document.getElementById('profile-modal').classList.remove('flex');
         };
 
-        // Hàm Tải ảnh lên bộ sưu tập
         window.uploadGalleryImages = async function(id) {
             const fileInput = document.getElementById('gallery-upload');
             if (!fileInput.files || fileInput.files.length === 0) {
@@ -572,11 +605,10 @@
             }
 
             const tutor = tutorsList.find(t => t.id === id);
-            let currentGallery = tutor.gallery || []; // Mảng chứa ảnh cũ
+            let currentGallery = tutor.gallery || []; 
             
             showToast("Đang xử lý và tải ảnh lên...");
             
-            // Nén và lưu từng ảnh một
             for (let i = 0; i < fileInput.files.length; i++) {
                 const base64 = await compressImage(fileInput.files[i]);
                 if (base64) currentGallery.push(base64);
@@ -588,18 +620,17 @@
                 console.error(error);
             } else {
                 showToast("Tải ảnh lên thành công!");
-                await fetchTutors(); // Tải lại CSDL
-                setTimeout(() => viewProfile(id), 300); // Tải lại modal hồ sơ
+                await fetchTutors(); 
+                setTimeout(() => viewProfile(id), 300); 
             }
         };
 
-        // Hàm Xóa ảnh khỏi bộ sưu tập
         window.deleteGalleryImage = async function(id, index) {
             if(!confirm("Bạn có chắc chắn muốn xóa ảnh này?")) return;
             
             const tutor = tutorsList.find(t => t.id === id);
             let currentGallery = tutor.gallery || [];
-            currentGallery.splice(index, 1); // Cắt bỏ ảnh tại vị trí index
+            currentGallery.splice(index, 1); 
 
             const { error } = await supabaseClient.from('tutors').update({ gallery: currentGallery }).eq('id', id);
             if (error) {
@@ -611,7 +642,6 @@
             }
         };
 
-        // Trình xem ảnh phóng to
         window.openImageViewer = function(src) {
             document.getElementById('viewer-img').src = src;
             document.getElementById('image-viewer').classList.remove('hidden');
@@ -621,10 +651,7 @@
             document.getElementById('image-viewer').classList.add('hidden');
             document.getElementById('image-viewer').classList.remove('flex');
         }
-        /* ---------------------------------------------------- */
 
-
-        // CÁC HÀM XỬ LÝ FORM
         window.openModal = function() {
             if (!isAdmin) { showToast("Bạn cần đăng nhập Admin!", "error"); return; }
             document.getElementById('tutor-modal').classList.remove('hidden');
@@ -633,8 +660,9 @@
             document.getElementById('tutor-id').value = '';
             document.getElementById('old-avatar-base64').value = '';
             document.getElementById('f-classes').value = '0';
-            document.getElementById('f-specialty').value = '';
+            document.getElementById('f-specialty').checked = false;
             document.getElementById('f-verified').checked = false;
+            document.getElementById('f-mode').value = 'Online & Offline';
             document.getElementById('avatar-preview-container').classList.add('hidden');
             document.getElementById('modal-title').innerText = 'Thêm Gia Sư Mới';
         };
@@ -644,9 +672,6 @@
             document.getElementById('tutor-modal').classList.remove('flex');
         };
 
-        /* ---------------------------------------------------- 
-           TÍNH NĂNG PHẢN HỒI
-        ----------------------------------------------------- */
         window.openFeedbackModal = function() {
             document.getElementById('feedback-form').reset();
             document.getElementById('feedback-modal').classList.remove('hidden');
@@ -702,9 +727,14 @@
             document.getElementById('f-subject').value = tutor.subject || '';
             document.getElementById('f-level').value = tutor.level || 'Sinh viên';
             document.getElementById('f-area').value = tutor.area || 'Hà Nội';
+            document.getElementById('f-mode').value = tutor.mode || 'Online & Offline';
             document.getElementById('f-bio').value = tutor.bio || '';
             document.getElementById('f-classes').value = tutor.classes || 0;
-            document.getElementById('f-specialty').value = tutor.specialty || '';
+            
+            // Xử lý cả khi dữ liệu cũ là chuỗi Text
+            const isSpecial = tutor.specialty === true || tutor.specialty === 'true' || (typeof tutor.specialty === 'string' && tutor.specialty.trim() !== '');
+            document.getElementById('f-specialty').checked = isSpecial;
+            
             document.getElementById('f-verified').checked = tutor.verified || false;
             document.getElementById('old-avatar-base64').value = tutor.avatarBase64 || '';
             
@@ -714,7 +744,6 @@
             }
         };
 
-        // Nén ảnh tránh đầy dung lượng DB
         window.compressImage = function(file) {
             return new Promise((resolve) => {
                 if (!file) resolve(null);
@@ -725,7 +754,7 @@
                     img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const max = 400; // Tăng chất lượng ảnh
+                        const max = 400; 
                         let w = img.width, h = img.height;
                         if (w > max || h > max) {
                             if (w > h) { h = Math.round((h * max) / w); w = max; } 
@@ -747,7 +776,6 @@
             }
         });
 
-        // LƯU VÀ XÓA DỮ LIỆU
         window.saveTutor = async function() {
             if (!isAdmin) { showToast("Vui lòng đăng nhập Admin!", "error"); return; }
             
@@ -775,9 +803,10 @@
                     subject: subject,
                     level: document.getElementById('f-level').value,
                     area: document.getElementById('f-area').value,
+                    mode: document.getElementById('f-mode').value,
                     bio: document.getElementById('f-bio').value.trim(),
                     classes: parseInt(document.getElementById('f-classes').value) || 0,
-                    specialty: document.getElementById('f-specialty').value.trim(),
+                    specialty: document.getElementById('f-specialty').checked, // Chuyển thành dạng bool
                     verified: document.getElementById('f-verified').checked,
                     avatarBase64: avatarBase64,
                     timestamp: Date.now()
@@ -788,7 +817,7 @@
 
                 showToast("Lưu gia sư thành công!");
                 closeModal();
-                fetchTutors(); // Cập nhật lại giao diện sau khi lưu
+                fetchTutors(); 
             } catch (e) {
                 console.error(e);
                 showToast("Lỗi đồng bộ. Cần chạy SQL cho các cột mới nếu bạn chưa làm!", "error");
@@ -816,7 +845,6 @@
             }
         };
 
-        // Bắt đầu chạy
         fetchTutors();
     </script>
 </body>
