@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Gia Sư Online Chuyên Nghiệp</title>
+    <title>Gia Sư Xuho</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -17,50 +17,37 @@
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
         .toast-enter { animation: slideIn 0.3s ease-out forwards; }
         .toast-exit { animation: fadeOut 0.3s ease-out forwards; }
-        
-        /* CSS cho Ruy băng Sponsored */
-        .ribbon {
-            position: absolute;
-            top: 15px;
-            right: -35px;
-            width: 130px;
-            background: #f59e0b;
-            color: white;
-            text-align: center;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 4px 0;
-            transform: rotate(45deg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <header class="bg-blue-600 text-white shadow-lg sticky top-0 z-30">
+    <header class="bg-red-600 text-white shadow-lg sticky top-0 z-30">
         <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3 w-full md:w-auto justify-between">
                 <div class="flex items-center gap-3">
                     <i class="fas fa-chalkboard-teacher text-2xl"></i>
-                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">Gia Sư Online</h1>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">Gia Sư Xuho</h1>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-2 justify-center" id="header-actions">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScOmXidZqRfUS8OeQuNg8XGlGaZcJXfHdGpIpFSjd9Xvp6a9A/viewform?usp=publish-editor" target="_blank" class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
+                <a href="https://fomr.io/s/_zncvA1NCs" target="_blank" class="bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
                     <i class="fas fa-user-plus"></i> <span>Đăng kí làm gia sư</span>
                 </a>
+
+                <button id="btn-feedback" onclick="openFeedbackModal()" class="bg-white/15 text-white hover:bg-white/25 border border-white/40 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
+                    <i class="fas fa-comment-alt"></i> <span>Phản hồi</span>
+                </button>
 
                 <button id="btn-admin-login" onclick="loginAdmin()" class="bg-slate-800 text-white hover:bg-slate-900 px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm">
                     <i class="fas fa-lock"></i> <span>Admin</span>
                 </button>
 
-                <button id="btn-add-tutor" onclick="openModal()" class="hidden bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2 text-sm">
+                <button id="btn-add-tutor" onclick="openModal()" class="hidden bg-white text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg font-bold transition-colors shadow-sm flex items-center gap-2 text-sm">
                     <i class="fas fa-plus"></i> <span>Thêm Gia Sư</span>
                 </button>
                 
-                <button id="btn-admin-logout" onclick="logoutAdmin()" class="hidden bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm" title="Thoát quyền quản trị">
+                <button id="btn-admin-logout" onclick="logoutAdmin()" class="hidden bg-slate-800 text-white hover:bg-slate-900 px-3 py-2 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2 text-sm" title="Thoát quyền quản trị">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
@@ -71,40 +58,59 @@
         <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="relative w-full md:w-1/3">
                 <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="filter-search" onkeyup="applyFilters()" placeholder="Tìm tên hoặc môn học..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <input type="text" id="filter-search" onkeyup="applyFilters()" placeholder="Tìm tên hoặc môn học..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-red-500 outline-none transition-all">
             </div>
             
             <div class="flex flex-wrap items-center w-full md:w-auto gap-3">
-                <select id="filter-level" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 flex-grow md:flex-grow-0">
+                <select id="filter-level" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
                     <option value="">Tất cả trình độ</option>
                     <option value="Sinh viên">Sinh viên</option>
                     <option value="Giáo viên">Giáo viên</option>
                     <option value="Chuyên gia">Chuyên gia</option>
                 </select>
                 
-                <select id="filter-area" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 flex-grow md:flex-grow-0">
+                <select id="filter-area" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
                     <option value="">Tất cả khu vực</option>
                     <option value="Hà Nội">Hà Nội</option>
                     <option value="TP.HCM">TP.HCM</option>
                     <option value="Đà Nẵng">Đà Nẵng</option>
                     <option value="Khác">Khác</option>
                 </select>
+
+                <select id="filter-sort" onchange="applyFilters()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none focus:ring-2 focus:ring-red-500 flex-grow md:flex-grow-0">
+                    <option value="newest">Mới nhất</option>
+                    <option value="classes">Số lớp đã mở (nhiều nhất)</option>
+                    <option value="name">Tên A-Z</option>
+                </select>
+
+                <button id="btn-fav-filter" onclick="toggleFavFilter()" class="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-500 hover:text-red-600 hover:border-red-300 outline-none transition-all flex items-center gap-2 flex-grow md:flex-grow-0 justify-center">
+                    <i class="fas fa-star"></i> <span>Yêu thích</span>
+                </button>
             </div>
+        </div>
+        <div class="container mx-auto px-4 pb-3">
+            <p class="text-xs text-slate-400" id="results-count"></p>
         </div>
     </div>
 
     <main class="container mx-auto px-4 py-8 flex-grow">
-        <div id="loading-spinner" class="flex flex-col items-center justify-center py-20 text-blue-600">
+        <div id="loading-spinner" class="flex flex-col items-center justify-center py-20 text-red-600">
             <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
             <p class="font-medium animate-pulse" id="loading-text">Đang tải dữ liệu...</p>
         </div>
 
-        <div id="tutors-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 hidden"></div>
+        <div id="tutors-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 hidden"></div>
 
         <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-slate-400">
             <i class="fas fa-users-slash text-6xl mb-4 text-slate-300"></i>
             <h3 class="text-xl font-bold text-slate-500 mb-2">Chưa có gia sư nào</h3>
             <p class="text-md text-center max-w-md">Hãy đăng nhập quyền Admin để thêm gia sư mới vào hệ thống, hoặc điều chỉnh lại bộ lọc tìm kiếm.</p>
+        </div>
+
+        <div class="fixed bottom-6 right-6 z-40">
+            <a href="https://fomr.io/s/_zncvA1NCs" target="_blank" class="md:hidden bg-red-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-xl hover:bg-red-700 transition-colors">
+                <i class="fas fa-user-plus"></i>
+            </a>
         </div>
     </main>
 
@@ -144,29 +150,29 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Họ và tên *</label>
-                            <input type="text" id="f-name" required placeholder="Nguyễn Văn A" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                            <input type="text" id="f-name" required placeholder="Nguyễn Văn A" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Số điện thoại *</label>
-                            <input type="tel" id="f-phone" required placeholder="0987..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                            <input type="tel" id="f-phone" required placeholder="0987..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Môn dạy *</label>
-                            <input type="text" id="f-subject" placeholder="VD: Toán, Tiếng Anh giao tiếp..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <input type="text" id="f-subject" placeholder="VD: Toán, Tiếng Anh giao tiếp..." required class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Số lớp đã mở</label>
-                            <input type="number" id="f-classes" value="0" min="0" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <input type="number" id="f-classes" value="0" min="0" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Trình độ</label>
-                            <select id="f-level" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white">
+                            <select id="f-level" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white">
                                 <option value="Sinh viên">Sinh viên</option>
                                 <option value="Giáo viên">Giáo viên</option>
                                 <option value="Chuyên gia">Chuyên gia</option>
@@ -174,7 +180,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Khu vực</label>
-                            <select id="f-area" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white">
+                            <select id="f-area" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all bg-white">
                                 <option value="Hà Nội">Hà Nội</option>
                                 <option value="TP.HCM">TP.HCM</option>
                                 <option value="Đà Nẵng">Đà Nẵng</option>
@@ -185,22 +191,22 @@
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Giới thiệu ngắn (Bio)</label>
-                        <textarea id="f-bio" rows="2" placeholder="Tóm tắt kinh nghiệm dạy học..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
+                        <textarea id="f-bio" rows="2" placeholder="Tóm tắt kinh nghiệm dạy học..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all resize-none"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4 bg-slate-50 rounded-lg border">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Ảnh đại diện</label>
-                            <input type="file" id="f-avatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer">
+                            <input type="file" id="f-avatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 transition-all cursor-pointer">
                             <div id="avatar-preview-container" class="mt-3 hidden">
-                                <img id="avatar-preview" class="w-16 h-16 object-cover rounded-full border-2 border-blue-400 shadow-sm">
+                                <img id="avatar-preview" class="w-16 h-16 object-cover rounded-full border-2 border-red-400 shadow-sm">
                             </div>
                         </div>
                         <div class="flex flex-col justify-center gap-3">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" id="f-sponsored" class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 transition-all cursor-pointer">
-                                <span class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Gắn thẻ "Sponsored" (Tài trợ)</span>
-                            </label>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Chuyên môn nổi bật</label>
+                                <input type="text" id="f-specialty" placeholder="VD: Luyện thi IELTS, Toán nâng cao..." class="w-full border-slate-300 rounded-lg p-2 text-sm border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
+                            </div>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" id="f-verified" class="w-5 h-5 text-emerald-500 rounded border-slate-300 focus:ring-emerald-500 transition-all cursor-pointer">
                                 <span class="text-sm font-medium text-slate-700 group-hover:text-emerald-500 transition-colors">Tick xanh Xác minh (Verified)</span>
@@ -212,8 +218,44 @@
             
             <div class="bg-slate-50 px-6 py-4 border-t flex justify-end gap-3">
                 <button onclick="closeModal()" class="px-5 py-2.5 rounded-lg text-slate-600 font-bold hover:bg-slate-200 transition-colors">Hủy bỏ</button>
-                <button onclick="saveTutor()" id="btn-save" class="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md transition-colors flex items-center gap-2">
+                <button onclick="saveTutor()" id="btn-save" class="px-6 py-2.5 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 shadow-md transition-colors flex items-center gap-2">
                     <i class="fas fa-save"></i> Lưu Dữ Liệu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="feedback-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[95vh]">
+            <div class="bg-slate-100 px-6 py-4 border-b flex justify-between items-center">
+                <h2 class="text-xl font-bold text-slate-800"><i class="fas fa-comment-alt text-red-500 mr-2"></i>Gửi Phản Hồi</h2>
+                <button onclick="closeFeedbackModal()" class="text-slate-500 hover:text-red-500 transition-colors w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto">
+                <p class="text-sm text-slate-500 mb-4">Bạn có góp ý, đánh giá hoặc gặp vấn đề gì? Hãy cho chúng tôi biết để cải thiện hệ thống tốt hơn.</p>
+                <form id="feedback-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Họ tên (không bắt buộc)</label>
+                        <input type="text" id="fb-name" placeholder="Tên của bạn" class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Số điện thoại / Zalo (không bắt buộc)</label>
+                        <input type="tel" id="fb-phone" placeholder="0987..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Nội dung phản hồi *</label>
+                        <textarea id="fb-message" rows="4" required placeholder="Chia sẻ góp ý, đánh giá hoặc vấn đề bạn gặp phải..." class="w-full border-slate-300 rounded-lg p-2.5 border focus:ring-2 focus:ring-red-500 outline-none transition-all resize-none"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-slate-50 px-6 py-4 border-t flex justify-end gap-3">
+                <button onclick="closeFeedbackModal()" class="px-5 py-2.5 rounded-lg text-slate-600 font-bold hover:bg-slate-200 transition-colors">Hủy bỏ</button>
+                <button onclick="submitFeedback()" id="btn-submit-feedback" class="px-6 py-2.5 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 shadow-md transition-colors flex items-center gap-2">
+                    <i class="fas fa-paper-plane"></i> Gửi Phản Hồi
                 </button>
             </div>
         </div>
@@ -230,6 +272,40 @@
         
         let tutorsList = []; // Dữ liệu gốc
         let isAdmin = false; // Phân quyền Admin
+        let favOnly = false; // Chỉ hiện gia sư yêu thích
+
+        // TÍNH NĂNG YÊU THÍCH (lưu trên trình duyệt)
+        window.getFavorites = function() {
+            try {
+                return JSON.parse(localStorage.getItem('gsxuho_favorites') || '[]');
+            } catch (e) { return []; }
+        };
+
+        window.toggleFavorite = function(id) {
+            let favs = getFavorites();
+            if (favs.includes(id)) {
+                favs = favs.filter(f => f !== id);
+                showToast("Đã bỏ yêu thích");
+            } else {
+                favs.push(id);
+                showToast("Đã thêm vào yêu thích!");
+            }
+            localStorage.setItem('gsxuho_favorites', JSON.stringify(favs));
+            applyFilters();
+        };
+
+        window.toggleFavFilter = function() {
+            favOnly = !favOnly;
+            const btn = document.getElementById('btn-fav-filter');
+            if (favOnly) {
+                btn.classList.add('bg-red-600', 'text-white', 'border-red-600');
+                btn.classList.remove('bg-white', 'text-slate-500');
+            } else {
+                btn.classList.remove('bg-red-600', 'text-white', 'border-red-600');
+                btn.classList.add('bg-white', 'text-slate-500');
+            }
+            applyFilters();
+        };
 
         // HÀM HIỂN THỊ THÔNG BÁO
         window.showToast = function(message, type = 'success') {
@@ -303,13 +379,26 @@
             const searchText = document.getElementById('filter-search').value.toLowerCase();
             const levelFilter = document.getElementById('filter-level').value;
             const areaFilter = document.getElementById('filter-area').value;
+            const sortBy = document.getElementById('filter-sort').value;
+            const favs = getFavorites();
 
             let filteredList = tutorsList.filter(tutor => {
                 const matchSearch = (tutor.name || '').toLowerCase().includes(searchText) || (tutor.subject || '').toLowerCase().includes(searchText);
                 const matchLevel = levelFilter === "" || tutor.level === levelFilter;
                 const matchArea = areaFilter === "" || tutor.area === areaFilter;
-                return matchSearch && matchLevel && matchArea;
+                const matchFav = !favOnly || favs.includes(tutor.id);
+                return matchSearch && matchLevel && matchArea && matchFav;
             });
+
+            if (sortBy === 'classes') {
+                filteredList.sort((a, b) => (b.classes || 0) - (a.classes || 0));
+            } else if (sortBy === 'name') {
+                filteredList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            } else {
+                filteredList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+            const countEl = document.getElementById('results-count');
+            if (countEl) countEl.innerText = `Tìm thấy ${filteredList.length} gia sư`;
 
             renderTutors(filteredList);
         }
@@ -332,58 +421,67 @@
             grid.classList.remove('hidden');
 
             listToRender.forEach(tutor => {
-                const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=c7d2fe&color=3730a3&size=200";
+                const defaultAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(tutor.name || 'GS') + "&background=fee2e2&color=b91c1c&size=200";
                 const avatar = tutor.avatarBase64 || defaultAvatar;
                 
-                // Lấy các chữ số từ SĐT để gán link Zalo
+                // Lấy các chữ số từ SĐT để gán link Zalo / gọi điện
                 const zaloPhone = (tutor.phone || '').replace(/\D/g, ''); 
+                const isFav = getFavorites().includes(tutor.id);
 
                 // Nút công cụ chỉ hiện khi là Admin
                 const adminTools = isAdmin ? `
-                    <div class="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                        <button onclick="editTutor('${tutor.id}')" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors shadow-md border border-blue-100"><i class="fas fa-pen text-xs"></i></button>
-                        <button onclick="confirmDelete('${tutor.id}')" class="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors shadow-md border border-red-100"><i class="fas fa-trash text-xs"></i></button>
+                    <div class="absolute top-2 left-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                        <button onclick="editTutor('${tutor.id}')" class="w-7 h-7 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors shadow-md border border-red-100"><i class="fas fa-pen text-[10px]"></i></button>
+                        <button onclick="confirmDelete('${tutor.id}')" class="w-7 h-7 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors shadow-md border border-red-100"><i class="fas fa-trash text-[10px]"></i></button>
                     </div>
                 ` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-[24px] border-[2px] border-[#4a8df8] overflow-hidden hover:shadow-xl transition-all duration-300 group relative flex flex-col pt-8 bg-gradient-to-b from-white to-slate-50";
+                card.className = "bg-white rounded-2xl border-[2px] border-red-500 overflow-hidden hover:shadow-xl transition-all duration-300 group relative flex flex-col pt-5 bg-gradient-to-b from-white to-slate-50";
                 
                 card.innerHTML = `
-                    ${tutor.sponsored ? '<div class="ribbon">Sponsored</div>' : ''}
-                    
                     ${adminTools}
+
+                    <button onclick="toggleFavorite('${tutor.id}')" class="absolute top-2 right-2 z-20 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-md border border-slate-100 hover:scale-110 transition-transform" title="Yêu thích">
+                        <i class="fa-star ${isFav ? 'fas text-amber-400' : 'far text-slate-300'} text-sm"></i>
+                    </button>
                     
-                    <div class="px-6 flex flex-col items-center flex-grow z-0">
-                        <div class="w-[100px] h-[100px] rounded-full bg-indigo-50 p-1 mb-4 shadow-inner">
+                    <div class="px-3 flex flex-col items-center flex-grow z-0">
+                        <div class="w-[64px] h-[64px] rounded-full bg-red-50 p-1 mb-2 shadow-inner">
                             <img src="${avatar}" class="w-full h-full rounded-full object-cover shadow-sm border-2 border-white">
                         </div>
                         
-                        <h3 class="text-[22px] font-bold text-[#1f2937] text-center w-full truncate mb-1">${tutor.name}</h3>
-                        <p class="text-sm font-semibold text-blue-600 mb-2 px-3 py-1 bg-blue-50 rounded-full">${tutor.subject}</p>
+                        <h3 class="text-[15px] font-bold text-[#1f2937] text-center w-full truncate mb-0.5">${tutor.name}</h3>
+                        <p class="text-[11px] font-semibold text-red-600 mb-1.5 px-2 py-0.5 bg-red-50 rounded-full truncate max-w-full">${tutor.subject}</p>
                         
-                        <p class="text-[15px] text-[#6b7280] text-center line-clamp-3 mb-4 min-h-[66px] leading-relaxed italic">
-                            "${tutor.bio || 'Chưa có thông tin giới thiệu chi tiết.'}"
+                        <p class="text-[12px] text-[#6b7280] text-center line-clamp-2 mb-2 min-h-[32px] leading-snug italic">
+                            "${tutor.bio || 'Chưa có thông tin giới thiệu.'}"
                         </p>
                         
-                        <div class="flex flex-wrap justify-center gap-2 mb-4 text-xs font-medium text-slate-500">
-                            <span class="bg-slate-100 px-2 py-1 rounded-md"><i class="fas fa-graduation-cap mr-1"></i>${tutor.level || 'Chưa cập nhật'}</span>
-                            <span class="bg-slate-100 px-2 py-1 rounded-md"><i class="fas fa-map-marker-alt mr-1"></i>${tutor.area || 'Chưa cập nhật'}</span>
+                        <div class="flex flex-wrap justify-center gap-1 mb-2 text-[10px] font-medium text-slate-500">
+                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md"><i class="fas fa-graduation-cap mr-0.5"></i>${tutor.level || 'Chưa cập nhật'}</span>
+                            <span class="bg-slate-100 px-1.5 py-0.5 rounded-md"><i class="fas fa-map-marker-alt mr-0.5"></i>${tutor.area || 'Chưa cập nhật'}</span>
+                            ${tutor.specialty ? `<span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md font-semibold"><i class="fas fa-star mr-0.5"></i>${tutor.specialty}</span>` : ''}
                         </div>
 
-                        <div class="text-[16px] font-bold text-[#374151] mb-5 bg-slate-100 px-4 py-2 rounded-xl">
-                            Số lớp đã mở: <span class="text-blue-600 font-extrabold text-lg ml-1">${tutor.classes || 0}</span>
+                        <div class="text-[12px] font-bold text-[#374151] mb-2 bg-slate-100 px-2.5 py-1 rounded-lg">
+                            Lớp: <span class="text-red-600 font-extrabold ml-0.5">${tutor.classes || 0}</span>
                         </div>
                         
-                        <a href="https://zalo.me/${zaloPhone}" target="_blank" class="flex items-center gap-2 text-[#2563eb] text-lg font-bold hover:text-blue-800 transition-transform hover:scale-105 mb-6">
-                            <i class="fas fa-comment-dots text-[#0068ff]"></i> Nhắn Zalo
-                        </a>
+                        <div class="flex items-center justify-center gap-3 mb-3">
+                            <a href="https://zalo.me/${zaloPhone}" target="_blank" title="Nhắn Zalo" class="flex items-center gap-1 text-[#2563eb] text-sm font-bold hover:scale-110 transition-transform">
+                                <i class="fas fa-comment-dots text-[#0068ff]"></i>
+                            </a>
+                            <a href="tel:${zaloPhone}" title="Gọi điện" class="flex items-center gap-1 text-emerald-600 text-sm font-bold hover:scale-110 transition-transform">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                        </div>
                     </div>
                     
-                    <div class="mt-auto px-6 pb-6 w-full">
-                        <div class="flex h-[52px] w-full rounded-xl overflow-hidden shadow-md cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                            <button onclick="viewProfile('${tutor.id}')" class="flex-grow bg-[#6a5af9] text-white font-bold hover:bg-[#5849e8] transition-colors text-[16px]">Xem hồ sơ</button>
-                            ${tutor.verified ? `<div class="bg-[#22c55e] w-[52px] flex items-center justify-center border-l border-[#1fa750]"><i class="fas fa-check text-white text-xl"></i></div>` : ''}
+                    <div class="mt-auto px-3 pb-3 w-full">
+                        <div class="flex h-[38px] w-full rounded-lg overflow-hidden shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all">
+                            <button onclick="viewProfile('${tutor.id}')" class="flex-grow bg-red-600 text-white font-bold hover:bg-red-700 transition-colors text-[12px]">Xem hồ sơ</button>
+                            ${tutor.verified ? `<div class="bg-[#22c55e] w-[38px] flex items-center justify-center border-l border-[#1fa750]"><i class="fas fa-check text-white text-sm"></i></div>` : ''}
                         </div>
                     </div>
                 `;
@@ -419,10 +517,10 @@
 
             // Nếu là Admin, hiển thị thêm form Upload ảnh
             const adminUploadHTML = isAdmin ? `
-                <div class="mt-4 p-5 bg-blue-50 border border-blue-100 rounded-xl">
-                    <h4 class="font-bold text-blue-800 mb-3"><i class="fas fa-cloud-upload-alt mr-2"></i>Quản lý ảnh (Chỉ Admin)</h4>
+                <div class="mt-4 p-5 bg-red-50 border border-red-100 rounded-xl">
+                    <h4 class="font-bold text-red-800 mb-3"><i class="fas fa-cloud-upload-alt mr-2"></i>Quản lý ảnh (Chỉ Admin)</h4>
                     <p class="text-xs text-slate-500 mb-3">Bạn có thể chọn tải lên bằng cấp, chứng chỉ hoặc ảnh hoạt động của gia sư.</p>
-                    <input type="file" id="gallery-upload" multiple accept="image/*" class="w-full text-sm text-slate-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer">
+                    <input type="file" id="gallery-upload" multiple accept="image/*" class="w-full text-sm text-slate-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-red-600 file:text-white hover:file:bg-red-700 transition-all cursor-pointer">
                     <button onclick="uploadGalleryImages('${tutor.id}')" class="mt-4 bg-emerald-500 text-white px-5 py-2.5 rounded-lg font-bold hover:bg-emerald-600 transition-colors text-sm shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto">
                         <i class="fas fa-save"></i> Lưu ảnh lên hồ sơ
                     </button>
@@ -432,24 +530,25 @@
             // Đổ dữ liệu HTML vào khung Modal
             profileContent.innerHTML = `
                 <div class="flex flex-col sm:flex-row items-center gap-5 border-b pb-6">
-                    <img src="${tutor.avatarBase64 || defaultAvatar}" class="w-28 h-28 rounded-full object-cover border-4 border-blue-100 shadow-md">
+                    <img src="${tutor.avatarBase64 || defaultAvatar}" class="w-28 h-28 rounded-full object-cover border-4 border-red-100 shadow-md">
                     <div class="text-center sm:text-left">
                         <h3 class="text-2xl font-extrabold text-slate-800">${tutor.name} ${tutor.verified ? '<i class="fas fa-check-circle text-emerald-500 text-xl ml-1" title="Đã xác minh"></i>' : ''}</h3>
-                        <p class="text-blue-600 font-bold text-lg mt-1">${tutor.subject}</p>
+                        <p class="text-red-600 font-bold text-lg mt-1">${tutor.subject}</p>
                         <div class="flex flex-wrap justify-center sm:justify-start gap-3 mt-3 text-sm font-medium text-slate-600">
                             <span class="bg-slate-100 px-3 py-1 rounded-full"><i class="fas fa-graduation-cap mr-1 text-slate-400"></i>${tutor.level || 'Chưa cập nhật'}</span>
                             <span class="bg-slate-100 px-3 py-1 rounded-full"><i class="fas fa-map-marker-alt mr-1 text-slate-400"></i>${tutor.area || 'Chưa cập nhật'}</span>
+                            ${tutor.specialty ? `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-semibold"><i class="fas fa-star mr-1"></i>${tutor.specialty}</span>` : ''}
                         </div>
                     </div>
                 </div>
                 
                 <div class="bg-slate-50 p-4 rounded-xl border">
-                    <h4 class="font-bold text-slate-800 mb-2 border-l-4 border-blue-500 pl-2">Giới thiệu bản thân</h4>
+                    <h4 class="font-bold text-slate-800 mb-2 border-l-4 border-red-500 pl-2">Giới thiệu bản thân</h4>
                     <p class="text-slate-600 whitespace-pre-wrap leading-relaxed">${tutor.bio || 'Chưa có thông tin giới thiệu chi tiết về gia sư này.'}</p>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold text-slate-800 mb-2 border-l-4 border-blue-500 pl-2">Hình ảnh hoạt động & Bằng cấp</h4>
+                    <h4 class="font-bold text-slate-800 mb-2 border-l-4 border-red-500 pl-2">Hình ảnh hoạt động & Bằng cấp</h4>
                     ${galleryHTML}
                     ${adminUploadHTML}
                 </div>
@@ -534,7 +633,7 @@
             document.getElementById('tutor-id').value = '';
             document.getElementById('old-avatar-base64').value = '';
             document.getElementById('f-classes').value = '0';
-            document.getElementById('f-sponsored').checked = false;
+            document.getElementById('f-specialty').value = '';
             document.getElementById('f-verified').checked = false;
             document.getElementById('avatar-preview-container').classList.add('hidden');
             document.getElementById('modal-title').innerText = 'Thêm Gia Sư Mới';
@@ -543,6 +642,52 @@
         window.closeModal = function() {
             document.getElementById('tutor-modal').classList.add('hidden');
             document.getElementById('tutor-modal').classList.remove('flex');
+        };
+
+        /* ---------------------------------------------------- 
+           TÍNH NĂNG PHẢN HỒI
+        ----------------------------------------------------- */
+        window.openFeedbackModal = function() {
+            document.getElementById('feedback-form').reset();
+            document.getElementById('feedback-modal').classList.remove('hidden');
+            document.getElementById('feedback-modal').classList.add('flex');
+        };
+
+        window.closeFeedbackModal = function() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+            document.getElementById('feedback-modal').classList.remove('flex');
+        };
+
+        window.submitFeedback = async function() {
+            const name = document.getElementById('fb-name').value.trim();
+            const phone = document.getElementById('fb-phone').value.trim();
+            const message = document.getElementById('fb-message').value.trim();
+
+            if (!message) { showToast("Vui lòng nhập nội dung phản hồi", "error"); return; }
+
+            const btn = document.getElementById('btn-submit-feedback');
+            btn.disabled = true;
+            btn.innerHTML = 'Đang gửi...';
+
+            try {
+                const { error } = await supabaseClient.from('feedback').insert({
+                    id: crypto.randomUUID(),
+                    name: name,
+                    phone: phone,
+                    message: message,
+                    timestamp: Date.now()
+                });
+                if (error) throw error;
+
+                showToast("Cảm ơn bạn đã gửi phản hồi!");
+                closeFeedbackModal();
+            } catch (e) {
+                console.error(e);
+                showToast("Lỗi gửi phản hồi. Cần tạo bảng 'feedback' trong Supabase!", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi Phản Hồi';
+            }
         };
 
         window.editTutor = function(id) {
@@ -559,7 +704,7 @@
             document.getElementById('f-area').value = tutor.area || 'Hà Nội';
             document.getElementById('f-bio').value = tutor.bio || '';
             document.getElementById('f-classes').value = tutor.classes || 0;
-            document.getElementById('f-sponsored').checked = tutor.sponsored || false;
+            document.getElementById('f-specialty').value = tutor.specialty || '';
             document.getElementById('f-verified').checked = tutor.verified || false;
             document.getElementById('old-avatar-base64').value = tutor.avatarBase64 || '';
             
@@ -632,7 +777,7 @@
                     area: document.getElementById('f-area').value,
                     bio: document.getElementById('f-bio').value.trim(),
                     classes: parseInt(document.getElementById('f-classes').value) || 0,
-                    sponsored: document.getElementById('f-sponsored').checked,
+                    specialty: document.getElementById('f-specialty').value.trim(),
                     verified: document.getElementById('f-verified').checked,
                     avatarBase64: avatarBase64,
                     timestamp: Date.now()
